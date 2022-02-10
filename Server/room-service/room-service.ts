@@ -1,4 +1,4 @@
-import { PlayerConnection } from '@app/room-service/player-connection';
+import { ClientConnection } from '@app/client-connection';
 import { Server } from 'socket.io';
 
 // 'this' within the callback will be a RoomService.
@@ -57,13 +57,13 @@ export abstract class RoomService {
     }
 
     // Will connect player to service in specified room
-    initConnectionToRoom(io: Server, playerConnection: PlayerConnection, room: string): void {
+    initConnectionToRoom(io: Server, clientConnection: ClientConnection, room: string): void {
         this.io = io;
         this.room = room;
 
-        this.initDefaultSocketEvents(playerConnection);
-        this.initConnection(playerConnection);
-        this.emitUpdateAllProps(playerConnection);
+        this.initDefaultSocketEvents(clientConnection);
+        this.initConnection(clientConnection);
+        this.emitUpdateAllProps(clientConnection);
     }
 
     // Manually emit a prop update.
@@ -77,13 +77,13 @@ export abstract class RoomService {
         this.io?.to(this.room).emit(message, ...values);
     }
 
-    protected emitMessageToPlayer(playerConnection: PlayerConnection, message: string, ...values: unknown[]) {
-        playerConnection.socket.emit(message, ...values);
+    protected emitMessageToPlayer(clientConnection: ClientConnection, message: string, ...values: unknown[]) {
+        clientConnection.socket.emit(message, ...values);
     }
 
     // Emit message to all players in room, except the sender
-    protected emitMessageFromPlayer(playerConnection: PlayerConnection, message: string, ...values: unknown[]) {
-        playerConnection.socket.to(this.room).emit(message, ...values);
+    protected emitMessageFromPlayer(clientConnection: ClientConnection, message: string, ...values: unknown[]) {
+        clientConnection.socket.to(this.room).emit(message, ...values);
     }
 
     protected getProxyCallMessage(methodKey: string) {
@@ -99,20 +99,20 @@ export abstract class RoomService {
     }
 
     // eslint-disable-next-line -- Empty method by default, implement to define custom socket events
-    protected initConnection(_playerConnection: PlayerConnection): void {}
+    protected initConnection(_clientConnection: ClientConnection): void {}
 
-    private initDefaultSocketEvents(playerConnection: PlayerConnection) {
+    private initDefaultSocketEvents(clientConnection: ClientConnection) {
         if (this.defaultSocketEvents !== undefined) {
             for (const [message, callback] of this.defaultSocketEvents) {
-                playerConnection.socket.on(message, callback.bind(this));
+                clientConnection.socket.on(message, callback.bind(this));
             }
         }
     }
 
-    private emitUpdateAllProps(playerConnection: PlayerConnection) {
+    private emitUpdateAllProps(clientConnection: ClientConnection) {
         if (this.mirroredProps !== undefined) {
             for (const propertyKey of this.mirroredProps) {
-                this.emitMessageToPlayer(playerConnection, this.getPropUpdateMessage(propertyKey), this[propertyKey]);
+                this.emitMessageToPlayer(clientConnection, this.getPropUpdateMessage(propertyKey), this[propertyKey]);
             }
         }
     }

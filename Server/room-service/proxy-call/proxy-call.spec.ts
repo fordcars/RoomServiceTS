@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions -- ESLint gets confused with Chai syntax*/
 /* eslint-disable @typescript-eslint/no-unused-expressions -- ESLint gets confused with Chai syntax*/
 import { RoomService, SocketEventCallback } from '@app/services/room-service/room-service';
-import { PlayerConnection } from '@app/types/player-connection';
+import { ClientConnection } from '@app/client-connection';
 import { expect } from 'chai';
 import * as Sinon from 'sinon';
 import { ProxyCall } from './proxy-call';
@@ -15,8 +15,8 @@ describe('ProxyCall', () => {
             // eslint-disable-next-line @typescript-eslint/no-empty-function -- Empty method in stub
             method() {}
 
-            // eslint-disable-next-line -- playerConnection unused in stub
-            override initConnection(_playerConnection: PlayerConnection) {}
+            // eslint-disable-next-line -- clientConnection unused in stub
+            override initConnection(_clientConnection: ClientConnection) {}
         }
         roomServicePrototype = RoomServiceStub.prototype;
         decorator = ProxyCall();

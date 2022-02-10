@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 
-export type PlayerConnection = {
+export type ClientConnection = {
     socket: Socket;
     name: string;
 };

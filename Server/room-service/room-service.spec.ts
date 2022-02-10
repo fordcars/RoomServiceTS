@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions -- ESLint gets confused with Chai syntax.*/
 /* eslint-disable @typescript-eslint/no-unused-expressions -- ESLint gets confused with Chai syntax.*/
-import { PlayerConnection } from '@app/types/player-connection';
+import { ClientConnection } from '@app/client-connection';
 import { expect } from 'chai';
 import * as Sinon from 'sinon';
 import { Server, Socket } from 'socket.io';
@@ -64,11 +64,11 @@ describe('RoomService', () => {
         });
     });
 
-    it('should init connection for playerConnection', () => {
-        const mockPlayerConnection: PlayerConnection = { name: 'John', socket: Sinon.createStubInstance(Socket) as unknown as Socket };
+    it('should init connection for clientConnection', () => {
+        const mockClientConnection: ClientConnection = { name: 'John', socket: Sinon.createStubInstance(Socket) as unknown as Socket };
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Spy on private method
         const initConnectionSpy = Sinon.spy(roomService as any, 'initConnection');
-        roomService.initConnectionToRoom(Sinon.createStubInstance(Server) as unknown as Server, mockPlayerConnection, 'room');
+        roomService.initConnectionToRoom(Sinon.createStubInstance(Server) as unknown as Server, mockClientConnection, 'room');
         expect(initConnectionSpy.called).to.be.true;
     });
 
@@ -85,15 +85,15 @@ describe('RoomService', () => {
         expect(emitSpy.called).to.be.false;
     });
 
-    it('should emit message from player', () => {
-        const playerEmitSpy = Sinon.spy();
+    it('should emit message from client', () => {
+        const clientEmitSpy = Sinon.spy();
         const socketStub = Sinon.createStubInstance(Socket);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Fake emit method
-        socketStub.to.returns({ emit: playerEmitSpy } as any);
-        const playerConnection: PlayerConnection = { name: 'John', socket: socketStub as unknown as Socket };
+        socketStub.to.returns({ emit: clientEmitSpy } as any);
+        const mockClientConnection: ClientConnection = { name: 'John', socket: socketStub as unknown as Socket };
 
         // eslint-disable-next-line dot-notation -- Test protected method
-        roomService['emitMessageFromPlayer'](playerConnection, 'msg');
-        expect(playerEmitSpy.calledWith('msg')).to.be.true;
+        roomService['emitMessageFromClient'](mockClientConnection, 'msg');
+        expect(clientEmitSpy.calledWith('msg')).to.be.true;
     });
 });
