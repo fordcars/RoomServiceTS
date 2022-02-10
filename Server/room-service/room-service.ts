@@ -1,4 +1,4 @@
-import { ClientConnection } from '@app/client-connection';
+import { ClientConnection } from '@app/room-service/client-connection';
 import { Server } from 'socket.io';
 
 // 'this' within the callback will be a RoomService.

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions -- ESLint gets confused with Chai syntax.*/
 /* eslint-disable @typescript-eslint/no-unused-expressions -- ESLint gets confused with Chai syntax.*/
-import { ClientConnection } from '@app/client-connection';
+import { ClientConnection } from '@app/room-service/client-connection';
 import { expect } from 'chai';
 import * as Sinon from 'sinon';
 import { Server, Socket } from 'socket.io';
