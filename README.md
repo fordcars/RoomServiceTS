@@ -1,5 +1,5 @@
 # RoomServiceTS
-A simple and flexible Angular/NodeJS socket.io framework.
+A flexible and straightforward Angular/NodeJS socket.io framework.
 
 
 ## Features
