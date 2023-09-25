@@ -1,5 +1,5 @@
 # RoomServiceTS
-A lightweight Angular/NodeJS socket.io framework.
+A lightweight Angular/NodeJS socket.io RPC framework.
 
 
 ## Features
